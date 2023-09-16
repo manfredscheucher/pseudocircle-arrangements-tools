@@ -14,3 +14,4 @@ To visualize all digonfree arrangements of 4 pseudocircles, run for example
 '''
 sage visualize.sage example_data/all4_digonfree.enc
 '''
+The program by default creates an (https://ipe.otfried.org/)[IPE] file, but can also create PDF or PNG.
