@@ -2,7 +2,7 @@
 
 This repository provides some functionality and tools 
 to work with arrangements of pairwise intersecting pseudocircles. 
-These have already turned out to be very in our past research:
+These tool have proved to be very useful in our past research:
 
 1. [Arrangements of Pseudocircles: Triangles and Drawings](http://doi.org/10.1007/s00454-020-00173-4)
 2. [Arrangements of Pseudocircles: On Circularizability](http://doi.org/10.1007/s00454-019-00077-y)
