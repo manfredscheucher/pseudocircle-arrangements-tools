@@ -94,11 +94,7 @@ def graph_2_ipe(G,G2,filepath):
 
 def compute_planar_dual_graph(G,arcs):
 	assert(G.is_planar(set_pos=1))
-	# note that Graph(edges,pos=vertices)
-	# might have intersections as lines would be straight-lines, not curves
-
 	faces = G.faces()
-	print("faces",faces)
 	dual_edges = []
 	checked_edges = {}
 	l = len(faces)
@@ -113,8 +109,6 @@ def compute_planar_dual_graph(G,arcs):
 				dual_edges.append((i,j,col))
 			else:
 				checked_edges[e] = i
-
-	print("dual_edges",len(dual_edges),dual_edges)
 	return Graph(dual_edges,multiedges=True)
 
 
@@ -154,50 +148,10 @@ def tutte_layout(G,outer_face,weights):
 
 
 
-
-def YA_common_intersection_coloring(G):
-	F = G.faces()
-	F = [tuple(e[0] for e in f) for f in F]
-	outer_face = F[0] # w.l.o.g.
-	
-	colF = {f:{c:1 for c in colors} for f in F}
-	for c in colors:
-		todo = [outer_face]
-		while todo:
-			f = todo.pop()
-			#print ("f",f)
-			colF[f][c] = 0
-			for f2 in F:
-				if colF[f2][c] != 0 and f2 not in todo:
-					for j in range(len(f2)):
-						for i in range(len(f)):
-							if f[i-1] == f2[j] and f[i] == f2[j-1]:
-								if c != G.edge_label(f[i-1],f[i]):
-									todo.append(f2)
-
-	for f,f2 in combinations(F,2):
-		valid = True
-		for c in colors:
-			if colF[f][c] == colF[f2][c]:
-				valid = False
-				break
-		if valid: return f
-
-	exit("NOT INTERSECTING")
-
-
-
 def compute_pseudocircles(G):
 	edges = G.edges()
 	colors = {c for (_,_,c) in edges}
 	edge_with_color = {c0:[(a,b) for (a,b,c) in edges if c == c0] for c0 in colors}
-	print("edges",edges)
-	print("edge_with_color",edge_with_color)
-
-	if 1: #
-		for c in edge_with_color:
-			print("c",len(edge_with_color[c]))
-		#exit()
 
 	pseudocirlcle = {}
 	for c in colors:
@@ -247,39 +201,27 @@ for l in open(args.fp).readlines():
 	vec = tuple(deg.count(i) for i in range(max(deg)+1))
 	print ("dual_vec",vec)
 
-	G_dual.plot().save("dual.png")
-
-
-	#assert(2 not in deg) 
-	# computing primal graph only works if no digons (3-connected)
-	G = compute_planar_dual_graph(G_dual,arcs) # primal one
+	# compute primal graph 
+	G = compute_planar_dual_graph(G_dual,arcs) 
 	print ("edges",G.edges(labels=0))
-
-	G.plot().save("primal.png")
-
-
-	signature = [G_dual.degree().count(x) for x in [2..max(G_dual.degree())]]
-	print ("signature:",'+'.join(str(s) for s in signature))
 
 	m = max(max(a) for a in arcs)+1
 	vertices = range(m)
 	ci = common_intersection(vertices,arcs)
 
-	# TODO...
-	G2 = Graph(G.edges(),multiedges=False)
-	G2.remove_multiple_edges()
-	G2.is_planar(set_pos=1)
-
+	
+	G2 = Graph(G.edges(),multiedges=False) # remove multi edges
+	assert(G2.is_planar(set_pos=1))
 
 	colors = list(set(c for (a,b,c) in G2.edges()))
 	n = len(colors)
 
-
-	drawn_graphs = set()
+	known_graphs = set()
 
 	candidates = []
 	maxsym = 0
 
+	# select candidates for the outer cell
 	for outer_face in G2.faces():
 		outer_face = [e[0] for e in outer_face]
 
@@ -294,11 +236,9 @@ for l in open(args.fp).readlines():
 				maxsym = sym
 				candidates = []
 
-		#if len(outer_face) != 5: continue # force outer cell to have specific size
-
 		gstr = this_graph.canonical_label().sparse6_string()
-		if gstr in drawn_graphs: continue
-		drawn_graphs.add(gstr)
+		if gstr in known_graphs: continue
+		known_graphs.add(gstr)
 
 		candidates.append(outer_face)
 
@@ -307,6 +247,7 @@ for l in open(args.fp).readlines():
 
 	ct2 = 0
 	for outer_face in candidates:
+		# compute iterated tutte embeddings for fixed outer cell
 
 		ct2 += 1	
 		
@@ -329,17 +270,13 @@ for l in open(args.fp).readlines():
 				for (u,v) in G.edges(labels=None):
 					weights[u,v] = weights[v,u] = (RR(weights_old[u,v]+eps*(mypoly(dist2(u,v))-weights_old[u,v])))
 
-
 				pos = G2.get_pos()
 				for f in G2.faces():
-					try:
-						vol_f = ConvexHull([pos[v] for u,v in f]).volume
-						qf = RR(vol_f)
-						for u,v in f:
-							weights[u,v] += float(it*qf)^4
-							weights[v,u] += float(it*qf)^4
-					except:
-						None
+					vol_f = ConvexHull([pos[v] for u,v in f]).volume
+					qf = RR(vol_f)
+					for u,v in f:
+						weights[u,v] += float(it*qf)^4
+						weights[v,u] += float(it*qf)^4
 
 				vw0 = vector([weights_old[e] for e in G.edges(labels=False)]).normalized()
 				vw1 = vector([weights[e] for e in G.edges(labels=False)]).normalized()
