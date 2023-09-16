@@ -210,9 +210,9 @@ def compute_pseudocircles(G):
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("n",type=int,help="number of pseudocircles")
+#parser.add_argument("n",type=int,help="number of pseudocircles")
 parser.add_argument("fp",type=str,help="input file")
-parser.add_argument("--format",default="ipe",choice=["ipe","pdf","png"],help="format of visualization")
+parser.add_argument("--format",default="ipe",choices=["ipe","pdf","png"],help="format of visualization")
 parser.add_argument("--multiple_views",action='store_true',help="visualize more than one view")
 parser.add_argument("--all_views",action='store_true',help="visualize all views")
 parser.add_argument("--add_text",action='store_true',help="add text")
@@ -226,12 +226,8 @@ print("c\tactive args:",{x:vargs[x] for x in vargs if vargs[x] != None and vargs
 ct = 0
 for l in open(args.fp).readlines():
 	ct+=1
-
-	if decode:
-		g = Graph(l)
-		arcs = color_graph(g)
-	else:
-		arcs = literal_eval(l)
+	g = Graph(l)
+	arcs = color_graph(g)
 
 	print(80*"-")
 	print("Graph #",ct)
@@ -247,7 +243,7 @@ for l in open(args.fp).readlines():
 	print ("dual_vec",vec)
 
 
-	assert(2 not in deg) 
+	#assert(2 not in deg) 
 	# computing primal graph only works if no digons (3-connected)
 	G = compute_planar_dual_graph(G_dual,arcs) # primal one
 	print ("edges",G.edges(labels=0))
@@ -347,12 +343,12 @@ for l in open(args.fp).readlines():
 
 
 		G.set_pos(G2.get_pos())
-		plotfile = filename+"_"+str(ct)+"_"+str(ct2)+"tutte7."+format
+		plotfile = f"{args.fp}.vis{ct}_{ct2}.{args.format}"
 		
-		if format == 'ipe':
+		if args.format == 'ipe':
 			graph_2_ipe(G,G2,plotfile)	
 
-		elif format in ['png','pdf']:
+		elif args.format in ['png','pdf']:
 			objects = []
 			p = G.get_pos()
 			
@@ -384,4 +380,4 @@ for l in open(args.fp).readlines():
 			pl.save(plotfile,figsize=10)		
 		
 		else:
-			exit("invalid format")
+			exit(f"invalid format: {format}")
