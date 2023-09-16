@@ -53,11 +53,11 @@ def compute_flipgraph(line):
 	print("total:",total_count)
 
 
-if 0:
+if 1:
 	compute_flipgraph(line)
+	
 else:
 	import cProfile
-	#cProfile.run('compute_flipgraph(line)')
 	with cProfile.Profile() as pr:
 		compute_flipgraph(line)
 	prof_path = 'file.prof'
