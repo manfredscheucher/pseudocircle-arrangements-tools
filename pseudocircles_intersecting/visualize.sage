@@ -8,6 +8,22 @@ from ast import literal_eval
 from itertools import combinations
 from basics import *
 
+IPE_COLORS = [
+'red',
+'green',
+'blue',
+'orange',
+'yellow',
+'purple',
+'black',
+'darkgreen',
+'darkred',
+'darkblue',
+'darkorange',
+'turquoise',
+'darkgray']
+IPE_COLORS += ['COLOR'+str(i) for i in range(20)]  # additional "virtual" colors
+
 
 # G might be a multigraph, G2 is simple graph 
 def graph_2_ipe(G,G2,filepath):
@@ -48,9 +64,9 @@ def graph_2_ipe(G,G2,filepath):
 			x1,y1 = points[f[1]]
 			x2,y2 = points[f[2]]
 			g.write('<path layer="beta" fill="lightgray">\n')
-			g.write(str(x0)+" "+str(y0)+" m\n")
-			g.write(str(x1)+" "+str(y1)+" l\n")
-			g.write(str(x2)+" "+str(y2)+" l\n")
+			g.write(f"{x0} {y0} m\n")
+			g.write(f"{x1} {y1} l\n")
+			g.write(f"{x2} {y2} l\n")
 			g.write('h\n')
 			g.write('</path>\n')
 
@@ -68,7 +84,7 @@ def graph_2_ipe(G,G2,filepath):
 
 	for c in pseudocirlcle:
 		# B-splines
-		g.write('<path layer="alpha" stroke="'+c+'" pen="heavier">\n')
+		g.write(f'<path layer="alpha" stroke="{IPE_COLORS[c]}" pen="heavier">\n')
 		for i in range(len(pseudocirlcle[c])):
 			x0,y0 = points[pseudocirlcle[c][i-2]]
 			x1,y1 = points[pseudocirlcle[c][i-1]]
@@ -79,9 +95,9 @@ def graph_2_ipe(G,G2,filepath):
 			lmbd2 = sqrt(min(distances[pseudocirlcle[c][i-1]])/d2)/3
 			xl,yl = x1+lmbd0*(x0-x1),y1+lmbd0*(y0-y1)
 			xr,yr = x1+lmbd2*(x2-x1),y1+lmbd2*(y2-y1)
-			g.write(str(xl)+" "+str(yl)+"\n")
-			g.write(str(x1)+" "+str(y1)+"\n")
-			g.write(str(xr)+" "+str(yr)+"\n")
+			g.write(f"{xl} {yl}\n")
+			g.write(f"{x1} {y1}\n")
+			g.write(f"{xr} {yr}\n")
 		g.write("u\n</path>\n")
 		
 	print ("pseudocircles:", pseudocirlcle)

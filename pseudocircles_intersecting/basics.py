@@ -5,21 +5,7 @@ from copy import copy,deepcopy
 import networkx as nx
 
 
-IPE_COLORS = [
-'red',
-'green',
-'blue',
-'orange',
-'yellow',
-'purple',
-'black',
-'darkgreen',
-'darkred',
-'darkblue',
-'darkorange',
-'turquoise',
-'darkgray']
-IPE_COLORS += ['COLOR'+str(i) for i in range(20)]  # additional "virtual" colors
+IPE_COLORS = range(30)
 
 
 def compute_fingerprint(arcs,arcs_with_color=None):
