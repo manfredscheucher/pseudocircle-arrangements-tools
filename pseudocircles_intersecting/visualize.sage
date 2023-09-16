@@ -93,7 +93,7 @@ def graph_2_ipe(G,G2,filepath):
 
 
 def compute_planar_dual_graph(G,arcs):
-	G.is_planar(set_pos=1)
+	assert(G.is_planar(set_pos=1))
 	# note that Graph(edges,pos=vertices)
 	# might have intersections as lines would be straight-lines, not curves
 
@@ -114,8 +114,8 @@ def compute_planar_dual_graph(G,arcs):
 			else:
 				checked_edges[e] = i
 
-	print("dual_edges",dual_edges)
-	return Graph(dual_edges)
+	print("dual_edges",len(dual_edges),dual_edges)
+	return Graph(dual_edges,multiedges=True)
 
 
 
@@ -194,6 +194,11 @@ def compute_pseudocircles(G):
 	print("edges",edges)
 	print("edge_with_color",edge_with_color)
 
+	if 1: #
+		for c in edge_with_color:
+			print("c",len(edge_with_color[c]))
+		#exit()
+
 	pseudocirlcle = {}
 	for c in colors:
 		Gc = Graph(edge_with_color[c])
@@ -242,11 +247,15 @@ for l in open(args.fp).readlines():
 	vec = tuple(deg.count(i) for i in range(max(deg)+1))
 	print ("dual_vec",vec)
 
+	G_dual.plot().save("dual.png")
+
 
 	#assert(2 not in deg) 
 	# computing primal graph only works if no digons (3-connected)
 	G = compute_planar_dual_graph(G_dual,arcs) # primal one
 	print ("edges",G.edges(labels=0))
+
+	G.plot().save("primal.png")
 
 
 	signature = [G_dual.degree().count(x) for x in [2..max(G_dual.degree())]]
@@ -257,7 +266,7 @@ for l in open(args.fp).readlines():
 	ci = common_intersection(vertices,arcs)
 
 	# TODO...
-	G2 = Graph(G)
+	G2 = Graph(G.edges(),multiedges=False)
 	G2.remove_multiple_edges()
 	G2.is_planar(set_pos=1)
 
