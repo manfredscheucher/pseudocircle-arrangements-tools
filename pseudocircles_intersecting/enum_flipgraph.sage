@@ -5,7 +5,6 @@ from basics_pseudocircles import *
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("n",type=int,help="number of pseudocircles")
 parser.add_argument("fp",type=str,help="input file")
 parser.add_argument("--digonfree",action='store_true',help="restrict to digonfree arrangements")
 parser.add_argument("--canonical",action='store_false',help="canonical labeling")
