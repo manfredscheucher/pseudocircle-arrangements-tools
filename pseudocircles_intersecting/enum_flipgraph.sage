@@ -17,19 +17,15 @@ print("c\tactive args:",{x:vargs[x] for x in vargs if vargs[x] != None and vargs
 
 line = open(args.fp).readline()
 line = line.replace("\n","")
-#G0 = Graph(line)
-#E = G.edges(labels=0)
 
 
 def compute_flipgraph(line):
-	#line = Graph(line).canonical_label(algorithm="bliss").sparse6_string()
 	layer = 0
 	prev_layer = set()
 	current_layer = {line}
 	total_count = 0
 
 	while current_layer:
-		#if layer > 5: break
 		layer += 1
 		total_count += len(current_layer)
 
@@ -55,7 +51,7 @@ def compute_flipgraph(line):
 
 if 1:
 	compute_flipgraph(line)
-	
+
 else:
 	import cProfile
 	with cProfile.Profile() as pr:
