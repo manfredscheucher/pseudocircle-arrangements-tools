@@ -11,6 +11,7 @@ These tool have proved to be very useful in our past research:
 5. [Flip Graphs for Arrangements of Pseudocircles](https://page.math.tu-berlin.de/~scheuch/publ/forsv-fgap-eurocg23.pdf)
 
 Also in:
+
 6. [The unavoidable arrangements of pseudocircles](https://arxiv.org/abs/1805.10957)
 
 We plan to make more functionality and 
