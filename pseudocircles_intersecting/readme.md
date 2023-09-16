@@ -2,13 +2,16 @@
 
 This repository provides some functionality and tools 
 to work with arrangements of pairwise intersecting pseudocircles. 
-These have already turned out to be very in the past:
+These have already turned out to be very in our past research:
 
 1. [Arrangements of Pseudocircles: Triangles and Drawings](http://doi.org/10.1007/s00454-020-00173-4)
 2. [Arrangements of Pseudocircles: On Circularizability](http://doi.org/10.1007/s00454-019-00077-y)
 3. [Coloring Circle Arrangements: New 4-Vertex-Critical Planar Graphs](http://arxiv.org/abs/2205.08181)
 4. [Arrangements of Pseudocircles: On Digons and Triangles](http://arxiv.org/abs/2208.12110)
 5. [Flip Graphs for Arrangements of Pseudocircles](https://page.math.tu-berlin.de/~scheuch/publ/forsv-fgap-eurocg23.pdf)
+
+Also in:
+6. [The unavoidable arrangements of pseudocircles](https://arxiv.org/abs/1805.10957)
 
 We plan to make more functionality and 
 the more general framework for general arrangements of pseudocircles 
