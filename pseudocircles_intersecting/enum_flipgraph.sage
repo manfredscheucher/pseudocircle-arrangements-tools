@@ -16,7 +16,8 @@ parser.add_argument("--output","-o",type=str,help="output file")
 parser.add_argument("--splitoutput","-so",action='store_true',help="split output, one file for each layer")
 parser.add_argument("--digonfree",action='store_true',help="restrict to digonfree arrangements")
 parser.add_argument("--canonical",action='store_false',help="canonical labeling")
-parser.add_argument("--parallel","-P",action='store_true',help="use flag for parallel computations")
+parser.add_argument("--parallel","-p",action='store_true',help="use flag for parallel computations")
+parser.add_argument("--chunks","-c",type=int,help="compute in chunks")
 
 args = parser.parse_args()
 vargs = vars(args)
@@ -43,10 +44,18 @@ def handle(line):
 		fingerprint = h.sparse6_string()
 		if fingerprint not in prev_layer:
 			next_layer.add(fingerprint)
-		del h
-	del g
-	del arcs
 	return next_layer
+
+
+def chunks(L,k): # split large arrays into chunks of size k
+	c = []
+	for x in L:
+		c.append(x)
+		if len(c) == k: 
+			yield c
+			c = []
+	if c: 
+		yield c
 
 
 if args.parallel:
@@ -85,18 +94,17 @@ if 1:
 
 			if args.splitoutput:
 				outf.close()
-				del outf
+				
 
-		if args.parallel:
-			result = Pool(cpu_count()).map(handle,current_layer)
+		if not args.chunks:
+			result = Pool(cpu_count()).map(handle,current_layer) if args.parallel else map(handle,current_layer)
+			next_layer = set.union(*result)
 		else:
-			result = map(handle,current_layer)
-
-		next_layer = set.union(*result)
-
-		del prev_layer
-		del result
-		gc.collect()
+			next_layer = set()
+			for c in chunks(current_layer,args.chunks):
+				#print("chunk of size",len(c))
+				result = Pool(cpu_count()).map(handle,c) if args.parallel else map(handle,c)
+				next_layer = next_layer.union(*result)
 	
 		prev_layer = current_layer
 		current_layer = next_layer
