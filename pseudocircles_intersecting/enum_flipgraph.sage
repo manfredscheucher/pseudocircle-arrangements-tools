@@ -52,7 +52,6 @@ if 1:
 	total_count = 0
 	
 	while current_layer:
-		layer += 1
 		total_count += len(current_layer)
 
 		print(f"{datetime.datetime.now()}: layer {layer} / # = {len(current_layer)} / total = {total_count}")
@@ -71,6 +70,7 @@ if 1:
 						
 		prev_layer = current_layer
 		current_layer = next_layer
+		layer += 1
 
 	print("total:",total_count)
 
