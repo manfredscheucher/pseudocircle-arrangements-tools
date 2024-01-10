@@ -42,7 +42,7 @@ def handle(line):
 	for h in all_possible_triangle_flips(g,digonfree=args.digonfree):
 		if args.canonical: h = h.canonical_label(algorithm="sage")
 		fingerprint = h.sparse6_string()
-		if fingerprint not in prev_layer:
+		if fingerprint not in prev_layer and fingerprint not in current_layer:
 			next_layer.add(fingerprint)
 	return next_layer
 
@@ -62,6 +62,10 @@ def chunks(L,k): # split large arrays into chunks of size k
 import psutil # for memory usage profiling, install with "sage --pip psutil"
 import gc # garbage collector to keep memory usage as low as possible
 
+if args.parallel:
+	from multiprocessing import Pool,cpu_count
+	print(f"use {cpu_count()} cores for parallelization")
+
 if 1:
 	layer = 0
 	prev_layer = set()
@@ -69,11 +73,7 @@ if 1:
 	total_count = 0
 	start_time = datetime.datetime.now()
 	
-	if args.parallel:
-		from multiprocessing import Pool,cpu_count
-		print(f"use {cpu_count()} cores for parallelization")
-		pool = Pool(cpu_count())
-		
+
 	while current_layer:
 		total_count += len(current_layer)
 
@@ -97,6 +97,8 @@ if 1:
 			if args.splitoutput:
 				outf.close()
 				
+		if args.parallel:
+			pool = Pool(cpu_count())
 
 		if not args.chunks:
 			result = pool.map(handle,current_layer) if args.parallel else map(handle,current_layer)

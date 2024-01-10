@@ -89,7 +89,7 @@ def handle(line):
 	for h in all_possible_triangle_flips(g,digonfree=args.digonfree):
 		if args.canonical: h = h.canonical_label(algorithm="sage")
 		fingerprint = h.sparse6_string()
-		if fingerprint not in prev_layer:
+		if fingerprint not in prev_layer and fingerprint not in current_layer:
 			next_layer.add(fingerprint)
 	return next_layer
 
