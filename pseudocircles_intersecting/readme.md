@@ -55,6 +55,7 @@ is submitted; contact one of the authors for a draft.
 
 For example, one can run 
 '''
-head -1 example_data/all5.mod1s6 > X && sage enum_flipgraph.sage X
+time sage enum_flipgraph.sage great/all6.enc.greatcircles.enc
 '''
-to enumerate all intersecting arrangements on 5.
+to enumerate all intersecting arrangements on 6. 
+Use parameter '-P' for parallelization
