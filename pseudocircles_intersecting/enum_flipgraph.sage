@@ -1,11 +1,17 @@
+# sagemath script to enumerate all arrangements of pairwise intersecting pseudocircles
+# author: Manfred Scheucher 2024
+
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 from itertools import * 
 from sys import *
 from basics_pseudocircles import *
 
-
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument("fp",type=str,help="input file")
+parser.add_argument("input",type=str,help="input file")
+parser.add_argument("--output","-o",type=str,help="output file")
 parser.add_argument("--digonfree",action='store_true',help="restrict to digonfree arrangements")
 parser.add_argument("--canonical",action='store_false',help="canonical labeling")
 
@@ -14,22 +20,29 @@ vargs = vars(args)
 print("c\tactive args:",{x:vargs[x] for x in vargs if vargs[x] != None and vargs[x] != False})
 
 
-
-line = open(args.fp).readline()
+line = open(args.input).readline()
 line = line.replace("\n","")
+print(f"read initial arrangement from first line of {args.input}: {line}")
 
+if args.output:
+	print(f"write all arrangements to {args.output}")
+	outf = open(args.output,"w")
 
-def compute_flipgraph(line):
+if 1:
 	layer = 0
 	prev_layer = set()
 	current_layer = {line}
 	total_count = 0
-
+	
 	while current_layer:
 		layer += 1
 		total_count += len(current_layer)
 
-		print("layer",layer,":",len(current_layer),"/",total_count,"/",len(current_layer)+len(prev_layer))	
+		print(f"layer {layer},\tcurrent # = {len(current_layer)},\ttotal # = {total_count}")
+
+		if args.output:
+			for line in current_layer:
+				outf.write(line+"\n")
 
 		next_layer = set()
 		for line in current_layer:
@@ -48,14 +61,3 @@ def compute_flipgraph(line):
 
 	print("total:",total_count)
 
-
-if 1:
-	compute_flipgraph(line)
-
-else:
-	import cProfile
-	with cProfile.Profile() as pr:
-		compute_flipgraph(line)
-	prof_path = 'file.prof'
-	pr.dump_stats(prof_path) # pyprof2calltree -i file.prof && kcachegrind file.prof.log
-	print("wrote profile to:",prof_path)
