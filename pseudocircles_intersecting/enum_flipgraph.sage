@@ -13,6 +13,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("input",type=str,help="input file")
 parser.add_argument("--output","-o",type=str,help="output file")
+parser.add_argument("--splitoutput","-so",action='store_true',help="split output, one file for each layer")
 parser.add_argument("--digonfree",action='store_true',help="restrict to digonfree arrangements")
 parser.add_argument("--canonical",action='store_false',help="canonical labeling")
 parser.add_argument("--parallel","-P",action='store_true',help="use flag for parallel computations")
@@ -26,7 +27,7 @@ line = open(args.input).readline()
 line = line.replace("\n","")
 print(f"read initial arrangement from first line of {args.input}: {line}")
 
-if args.output:
+if args.output and not args.splitoutput:
 	print(f"write all arrangements to {args.output}")
 	outf = open(args.output,"w")
 
@@ -57,6 +58,11 @@ if 1:
 		print(f"{datetime.datetime.now()}: layer {layer} / # = {len(current_layer)} / total = {total_count}")
 
 		if args.output:
+			if args.splitoutput:
+				output = f"{args.output}.{layer}"
+				print(f"write layer {layer} arrangements to {output}")
+				outf = open(output,"w")
+
 			for line in current_layer:
 				outf.write(line+"\n")
 
