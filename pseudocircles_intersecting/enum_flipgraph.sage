@@ -49,7 +49,10 @@ def handle(line):
 if args.parallel:
 	from multiprocessing import Pool,cpu_count
 	print(f"use {cpu_count()} cores for parallelization")
-	
+
+import psutil # for memory usage profiling
+import os, psutil
+
 if 1:
 	layer = 0
 	prev_layer = set()
@@ -59,7 +62,11 @@ if 1:
 	while current_layer:
 		total_count += len(current_layer)
 
-		print(f"{datetime.datetime.now()}: layer {layer} / # = {len(current_layer)} / total = {total_count}")
+		#mem_usageGB = round(psutil.virtual_memory()[3]/10^9,3)
+		mem_usageGB = round(psutil.Process(os.getpid()).memory_info().rss/10^9,3)
+		mem_usageperc = psutil.virtual_memory()[2]
+
+		print(f"{datetime.datetime.now()}: layer {layer} / # = {len(current_layer)} / total = {total_count} / mem_usage = {mem_usageGB}GB / OS memory {mem_usageperc}%")
 
 		if args.output:
 			if args.splitoutput:
