@@ -43,6 +43,9 @@ def handle(line):
 		fingerprint = h.sparse6_string()
 		if fingerprint not in prev_layer:
 			next_layer.add(fingerprint)
+		del h
+	del g
+	del arcs
 	return next_layer
 
 
@@ -64,7 +67,7 @@ if 1:
 		total_count += len(current_layer)
 
 		#mem_usageGB = round(psutil.virtual_memory()[3]/10^9,3)
-		mem_usageGB = round(psutil.Process(os.getpid()).memory_info().rss/10^9,3)
+		mem_usageGB = round(psutil.Process(os.getpid()).memory_info().rss/10^9,6)
 		mem_usageperc = psutil.virtual_memory()[2]
 
 		now_time = datetime.datetime.now()
@@ -73,7 +76,7 @@ if 1:
 		if args.output:
 			if args.splitoutput:
 				output = f"{args.output}.{layer}"
-				print(f"write layer {layer} arrangements to {output}")
+				print(f"write {len(next_layer)} layer-{layer} arrangements to {output}")
 				outf = open(output,"w")
 
 			for line in current_layer:
@@ -98,6 +101,7 @@ if 1:
 		prev_layer = current_layer
 		current_layer = next_layer
 		layer += 1
+
 
 	print("total:",total_count)
 
