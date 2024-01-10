@@ -46,6 +46,10 @@ def handle(line):
 	return next_layer
 
 
+if args.parallel:
+	from multiprocessing import Pool,cpu_count
+	print(f"use {cpu_count()} cores for parallelization")
+	
 if 1:
 	layer = 0
 	prev_layer = set()
@@ -67,7 +71,6 @@ if 1:
 				outf.write(line+"\n")
 
 		if args.parallel:
-			from multiprocessing import Pool,cpu_count
 			result = Pool(cpu_count()).map(handle,current_layer)
 		else:
 			result = map(handle,current_layer)
