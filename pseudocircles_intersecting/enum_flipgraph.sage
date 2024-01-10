@@ -17,7 +17,7 @@ parser.add_argument("--splitoutput","-so",action='store_true',help="split output
 parser.add_argument("--digonfree",action='store_true',help="restrict to digonfree arrangements")
 parser.add_argument("--canonical",action='store_false',help="canonical labeling")
 parser.add_argument("--parallel","-p",action='store_true',help="use flag for parallel computations")
-parser.add_argument("--chunks","-c",type=int,help="compute in chunks")
+parser.add_argument("--chunks","-c",type=int,default=100,help="compute in chunks")
 
 args = parser.parse_args()
 vargs = vars(args)
