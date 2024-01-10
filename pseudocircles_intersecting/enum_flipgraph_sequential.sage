@@ -108,6 +108,7 @@ def chunks(L,k): # split large arrays into chunks of size k
 if args.parallel:
 	from multiprocessing import Pool,cpu_count
 	print(f"layer {layer}: use {cpu_count()} cores for parallelization")
+	pool = Pool(cpu_count())
 
 import psutil # for memory usage profiling, install with "sage --pip psutil"
 import gc # garbage collector to keep memory usage as low as possible
@@ -135,13 +136,13 @@ if 1:
 
 	if 1:
 		if not args.chunks:
-			result = Pool(cpu_count()).map(handle,current_layer) if args.parallel else map(handle,current_layer)
+			result = pool.map(handle,current_layer) if args.parallel else map(handle,current_layer)
 			next_layer = set.union(*result)
 		else:
 			next_layer = set()
 			for c in chunks(current_layer,args.chunks):
 				#print("chunk of size",len(c))
-				result = Pool(cpu_count()).map(handle,c) if args.parallel else map(handle,c)
+				result = pool.map(handle,c) if args.parallel else map(handle,c)
 				next_layer = next_layer.union(*result)
 
 		#mem_usageGB = round(psutil.virtual_memory()[3]/10^9,3)
