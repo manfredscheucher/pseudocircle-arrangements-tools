@@ -58,6 +58,7 @@ if 1:
 	prev_layer = set()
 	current_layer = {line}
 	total_count = 0
+	start_time = datetime.datetime.now()
 	
 	while current_layer:
 		total_count += len(current_layer)
@@ -66,7 +67,8 @@ if 1:
 		mem_usageGB = round(psutil.Process(os.getpid()).memory_info().rss/10^9,3)
 		mem_usageperc = psutil.virtual_memory()[2]
 
-		print(f"{datetime.datetime.now()}: layer {layer} / # = {len(current_layer)} / total = {total_count} / mem_usage = {mem_usageGB}GB / OS memory {mem_usageperc}%")
+		now_time = datetime.datetime.now()
+		print(f"{now_time} / {now_time-start_time}: layer {layer} / # = {len(current_layer)} / total = {total_count} / mem_usage = {mem_usageGB}GB / OS memory {mem_usageperc}%")
 
 		if args.output:
 			if args.splitoutput:
@@ -76,6 +78,11 @@ if 1:
 
 			for line in current_layer:
 				outf.write(line+"\n")
+				outf.flush()
+
+			if args.splitoutput:
+				outf.close()
+				del outf
 
 		if args.parallel:
 			result = Pool(cpu_count()).map(handle,current_layer)
