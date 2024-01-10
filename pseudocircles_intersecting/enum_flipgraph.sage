@@ -75,6 +75,8 @@ if 1:
 	
 
 	while current_layer:
+		assert(not (current_layer&prev_layer)) # disjoint sets
+	
 		total_count += len(current_layer)
 
 		#mem_usageGB = round(psutil.virtual_memory()[3]/10^9,3)

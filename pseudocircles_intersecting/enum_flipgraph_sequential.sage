@@ -128,6 +128,7 @@ if 1:
 	print(f"layer {layer}: read {len(current_layer)} from current file {current_fp}")
 	assert(current_layer)
 
+	assert(not (current_layer&prev_layer)) # disjoint sets
 
 	if args.parallel:
 		from multiprocessing import Pool,cpu_count
