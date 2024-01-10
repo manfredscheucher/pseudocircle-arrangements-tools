@@ -50,8 +50,8 @@ if args.parallel:
 	from multiprocessing import Pool,cpu_count
 	print(f"use {cpu_count()} cores for parallelization")
 
-import psutil # for memory usage profiling
-import os, psutil
+import psutil # for memory usage profiling, install with "sage --pip psutil"
+import gc # garbage collector to keep memory usage as low as possible
 
 if 1:
 	layer = 0
@@ -83,7 +83,11 @@ if 1:
 			result = map(handle,current_layer)
 
 		next_layer = set.union(*result)
-						
+
+		del prev_layer
+		del result
+		gc.collect()
+	
 		prev_layer = current_layer
 		current_layer = next_layer
 		layer += 1
