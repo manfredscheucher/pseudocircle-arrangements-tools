@@ -105,11 +105,6 @@ def chunks(L,k): # split large arrays into chunks of size k
 		yield c
 
 
-if args.parallel:
-	from multiprocessing import Pool,cpu_count
-	print(f"layer {layer}: use {cpu_count()} cores for parallelization")
-	pool = Pool(cpu_count())
-
 import psutil # for memory usage profiling, install with "sage --pip psutil"
 import gc # garbage collector to keep memory usage as low as possible
 
@@ -133,6 +128,11 @@ if 1:
 	print(f"layer {layer}: read {len(current_layer)} from current file {current_fp}")
 	assert(current_layer)
 
+
+	if args.parallel:
+		from multiprocessing import Pool,cpu_count
+		print(f"layer {layer}: use {cpu_count()} cores for parallelization")
+		pool = Pool(cpu_count())
 
 	if 1:
 		if not args.chunks:
