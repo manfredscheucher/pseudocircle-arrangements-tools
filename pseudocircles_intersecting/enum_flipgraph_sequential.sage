@@ -21,7 +21,7 @@ parser.add_argument("--layer","-l",type=int,default=None,help="layer")
 parser.add_argument("--digonfree",action='store_true',help="restrict to digonfree arrangements")
 parser.add_argument("--canonical",action='store_false',help="canonical labeling")
 parser.add_argument("--parallel","-p",action='store_true',help="compute in parallel")
-parser.add_argument("--chunks","-c",type=int,default=100,help="compute in chunks")
+parser.add_argument("--chunks","-c",type=int,default=1000,help="compute in chunks")
 
 args = parser.parse_args()
 vargs = vars(args)
