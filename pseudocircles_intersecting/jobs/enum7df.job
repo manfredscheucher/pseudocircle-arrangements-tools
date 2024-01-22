@@ -6,4 +6,4 @@
 #SBATCH --cpus-per-task=32
 #SBATCH --mail-user=scheucher@math.tu-berlin.de
 #SBATCH --mail-type=BEGIN,END
-time sage enum_flipgraph_sequential.sage great/all7.enc.greatcircles.enc enum7 -p -c 3000 --digonfree
+time /net/site-local.linux64/bin/sage-10.1 enum_flipgraph_sequential.sage great/all7.enc.greatcircles.enc enum7 -p -c 3000 --digonfree
