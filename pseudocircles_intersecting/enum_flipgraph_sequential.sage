@@ -10,7 +10,6 @@ from basics_pseudocircles import *
 import datetime
 import os
 
-import sys
 
 import argparse
 parser = argparse.ArgumentParser()
@@ -69,6 +68,7 @@ if layer == None:
 
 		next_fp = f"{args.output}.{layer+1}"
 		assert(not os.path.exists(next_fp))
+		stdout.flush()
 
 		os.system(cmd)
 		print(40*"*")
