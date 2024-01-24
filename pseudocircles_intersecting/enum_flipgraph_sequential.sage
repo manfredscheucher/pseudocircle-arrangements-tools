@@ -64,6 +64,7 @@ if layer == None:
 		cmd = f"sage {script} {args.input} {args.output} --layer {layer}"
 		if args.parallel: cmd += " --parallel"
 		if args.chunks: cmd += f" --chunks {args.chunks}"
+		if args.digonfree: cmd += f" --digonfree"
 		print(f"start processing layer {layer}: {cmd}")
 
 		next_fp = f"{args.output}.{layer+1}"
