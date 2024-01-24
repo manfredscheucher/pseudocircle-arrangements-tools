@@ -1,0 +1,9 @@
+#!/bin/bash --login
+#SBATCH --job-name=APC_enum7
+#SBATCH --output=APC_enum7.out
+#SBATCH --mem=900G
+#SBATCH -p verylong
+#SBATCH --cpus-per-task=32
+#SBATCH --mail-user=scheucher@math.tu-berlin.de
+#SBATCH --mail-type=BEGIN,END
+time /net/site-local.linux64/bin/sage-10.1 enum_flipgraph_sequential.sage great/all7.enc.greatcircles.enc enum7_all -p -c 30000 
