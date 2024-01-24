@@ -136,6 +136,7 @@ if 1:
 		pool = Pool(cpu_count())
 
 	if 1:
+		stdout.flush()
 		if not args.chunks:
 			result = pool.map(handle,current_layer) if args.parallel else map(handle,current_layer)
 			next_layer = set.union(*result)
