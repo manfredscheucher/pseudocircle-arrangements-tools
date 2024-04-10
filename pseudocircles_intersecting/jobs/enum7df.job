@@ -2,7 +2,7 @@
 #SBATCH --job-name=APC_enum7df
 #SBATCH --output=APC_enum7df.out
 #SBATCH --mem=50G
-#SBATCH -p long
+#SBATCH --time=168:00:00
 #SBATCH --cpus-per-task=32
 #SBATCH --mail-user=scheucher@math.tu-berlin.de
 #SBATCH --mail-type=BEGIN,END
