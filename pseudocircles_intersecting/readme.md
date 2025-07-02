@@ -58,4 +58,4 @@ For example, one can run
 time sage enum_flipgraph.sage great/all6.enc.greatcircles.enc
 '''
 to enumerate all intersecting arrangements on 6. 
-Use parameter '-P' for parallelization
+Use parameter '-p' for parallelization

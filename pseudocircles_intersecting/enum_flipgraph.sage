@@ -15,6 +15,7 @@ parser.add_argument("input",type=str,help="input file")
 parser.add_argument("--output","-o",type=str,help="output file")
 parser.add_argument("--splitoutput","-so",action='store_true',help="split output, one file for each layer")
 parser.add_argument("--digonfree",action='store_true',help="restrict to digonfree arrangements")
+parser.add_argument("--great",action='store_true',help="restrict to pseudo-great arrangements")
 parser.add_argument("--canonical",action='store_false',help="canonical labeling")
 parser.add_argument("--parallel","-p",action='store_true',help="use flag for parallel computations")
 parser.add_argument("--chunks","-c",type=int,default=1000,help="compute in chunks")
@@ -39,7 +40,7 @@ def handle(line):
 	arcs = color_graph(g)
 	g = Graph([(u,v,arcs[(u,v)]) for (u,v) in arcs])
 	next_layer = set()
-	for h in all_possible_triangle_flips(g,digonfree=args.digonfree):
+	for h in all_possible_triangle_flips(g,digonfree=args.digonfree,great=args.great):
 		if args.canonical: h = h.canonical_label(algorithm="sage")
 		fingerprint = h.sparse6_string()
 		if fingerprint not in prev_layer and fingerprint not in current_layer:

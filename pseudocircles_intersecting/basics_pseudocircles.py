@@ -71,11 +71,22 @@ def flip_triangle(G,v):
 	return G
 
 
-def all_possible_triangle_flips(g,digonfree=False):
+def all_possible_triangle_flips(g,digonfree=False,great=False):
+	if great:
+		diam = g.diameter()
+		dist = g.distance_all_pairs()
+		for v in g: 
+			assert(max(dist[v].values()) == diam) # arrangement is great
+
 	for v in g.vertices():
 		if g.degree(v) == 3:
 			g2 = g.copy()
 			g2 = flip_triangle(g2,v)
+
+			if great:
+				v_antipodal = [w for w in g.vertices() if dist[v][w] == diam]
+				assert(len(v_antipodal) == 1)
+				g2 = flip_triangle(g2,v_antipodal[0])
 			
 			if not digonfree or 2 not in g2.degree(): 
 				yield g2
